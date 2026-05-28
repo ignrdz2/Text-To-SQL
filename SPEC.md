@@ -476,12 +476,12 @@ El sanitizer debe rechazar cualquier query que:
 
 ### Fase 1 — Core Backend (~1 semana)
 
-- [ ] 1.1 Setup: estructura de carpetas, docker-compose, .env.example
-- [ ] 1.2 Schema Loader: extracción automática + cache + ejemplos de valores
-- [ ] 1.3 Sanitizer: validación de seguridad + tests inline
-- [ ] 1.4 LLM Service: integración Gemini + construcción del prompt
-- [ ] 1.5 DB Service: ejecución de queries + timeout
-- [ ] 1.6 Router /api/query: pipeline completo + retry logic
+- [x] 1.1 Setup: estructura de carpetas, docker-compose, .env.example
+- [x] 1.2 Schema Loader: extracción automática + cache + ejemplos de valores
+- [x] 1.3 Sanitizer: validación de seguridad + tests inline
+- [x] 1.4 LLM Service: integración Gemini + construcción del prompt
+- [x] 1.5 DB Service: ejecución de queries + timeout
+- [x] 1.6 Router /api/query: pipeline completo + retry logic
 
 ### Fase 2 — Frontend Base (~4-5 días)
 
