@@ -1,6 +1,6 @@
 """
 llm_service.py
-Llama a Gemini 1.5 Flash y devuelve el SQL generado.
+Llama a Gemini 2.0 Flash y devuelve el SQL generado.
 El template del prompt vive en prompts/sql_prompt.py.
 
 Contratos de retorno de generate_sql():
@@ -13,7 +13,8 @@ Contratos de retorno de generate_sql():
 import os
 import logging
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 from prompts.sql_prompt import build_prompt
@@ -83,16 +84,15 @@ def generate_sql(question: str, schema: dict) -> str:
     if not api_key:
         raise LLMError("GEMINI_API_KEY no está definida en las variables de entorno.")
 
-    genai.configure(api_key=api_key)
-
     prompt = build_prompt(question, _format_schema(schema))
     logger.debug("Prompt enviado a Gemini (%d chars)", len(prompt))
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
                 temperature=0,
                 max_output_tokens=512,
             ),
