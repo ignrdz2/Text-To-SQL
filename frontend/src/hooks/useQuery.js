@@ -65,5 +65,9 @@ export function useQuery() {
     }
   }
 
-  return { question, setQuestion, result, isLoading, history, executeQuery }
+  function clearResult() {
+    setResult(null)
+  }
+
+  return { question, setQuestion, result, isLoading, history, executeQuery, clearResult }
 }

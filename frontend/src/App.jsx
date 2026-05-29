@@ -3,6 +3,7 @@ import QueryInput from "./components/QueryInput";
 import QueryHistory from "./components/QueryHistory";
 import SqlViewer from "./components/SqlViewer";
 import ChartRenderer from "./components/ChartRenderer";
+import ClarificationMessage from "./components/ClarificationMessage";
 import ResultTable from "./components/ResultTable";
 
 // Preguntas de ejemplo del SPEC #18 para el estado inicial
@@ -14,7 +15,7 @@ const EXAMPLE_QUESTIONS = [
 ];
 
 export default function App() {
-  const { question, setQuestion, result, isLoading, history, executeQuery } =
+  const { question, setQuestion, result, isLoading, history, executeQuery, clearResult } =
     useQuery();
 
   function handleSubmit(q) {
@@ -44,7 +45,12 @@ export default function App() {
 
           {/* Columna derecha: resultados */}
           <div className="lg:col-span-2 space-y-4">
-            <ResultArea result={result} isLoading={isLoading} />
+            <ResultArea
+              result={result}
+              isLoading={isLoading}
+              onAnswer={executeQuery}
+              onClearResult={clearResult}
+            />
           </div>
         </div>
       </main>
@@ -65,7 +71,7 @@ function Header() {
   );
 }
 
-function ResultArea({ result, isLoading }) {
+function ResultArea({ result, isLoading, onAnswer, onClearResult }) {
   // Estado de carga
   if (isLoading) {
     return <ResultTable isLoading={true} />;
@@ -85,7 +91,13 @@ function ResultArea({ result, isLoading }) {
 
   // El LLM pide clarificación
   if (result.clarification_needed) {
-    return <ClarificationBanner question={result.clarification_question} />;
+    return (
+      <ClarificationMessage
+        question={result.clarification_question}
+        onAnswer={onAnswer}
+        onCancel={onClearResult}
+      />
+    );
   }
 
   // Resultado con datos (o sin filas — ResultTable lo maneja)
@@ -152,25 +164,6 @@ function ErrorBanner({ type, message }) {
   );
 }
 
-function ClarificationBanner({ question }) {
-  return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-yellow-500">
-          <InfoIcon />
-        </span>
-        <p className="text-sm font-medium text-yellow-800">
-          Necesito más información
-        </p>
-      </div>
-      <p className="text-sm text-yellow-700 ml-6">{question}</p>
-      <p className="text-xs text-yellow-500 ml-6 mt-2">
-        Reformulá tu pregunta con más detalle en el campo de arriba.
-      </p>
-    </div>
-  );
-}
-
 function ErrorIcon() {
   return (
     <svg
@@ -188,19 +181,3 @@ function ErrorIcon() {
   );
 }
 
-function InfoIcon() {
-  return (
-    <svg
-      className="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  );
-}
