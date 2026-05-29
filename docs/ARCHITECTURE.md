@@ -49,7 +49,7 @@ Sistema que traduce preguntas en lenguaje natural a consultas SQL válidas, las 
 | ------------- | ---------------- | ---------------------------------------- |
 | Frontend      | React + Vite     | Con Recharts para visualizaciones        |
 | Backend       | FastAPI          | Python 3.11+                             |
-| LLM           | Gemini 1.5 Flash | Via `google-generativeai` SDK            |
+| LLM           | Gemini 2.5 Flash | Via `google-generativeai` SDK            |
 | Base de datos | PostgreSQL       | 15, contenedor Docker                    |
 | Orquestación  | Docker Compose   | Un solo `docker compose up` levanta todo |
 | Estilos       | Tailwind CSS     |                                          |
@@ -474,37 +474,37 @@ El sanitizer debe rechazar cualquier query que:
 
 ## 17. Plan de Implementación
 
-### Fase 1 — Core Backend (~1 semana)
+### Fase 1 — Core Backend
 
-- [x] 1.1 Setup: estructura de carpetas, docker-compose, .env.example
-- [x] 1.2 Schema Loader: extracción automática + cache + ejemplos de valores
-- [x] 1.3 Sanitizer: validación de seguridad + tests inline
-- [x] 1.4 LLM Service: integración Gemini + construcción del prompt
-- [x] 1.5 DB Service: ejecución de queries + timeout
-- [x] 1.6 Router /api/query: pipeline completo + retry logic
+- 1.1 Setup: estructura de carpetas, docker-compose, .env.example
+- 1.2 Schema Loader: extracción automática + cache + ejemplos de valores
+- 1.3 Sanitizer: validación de seguridad + tests inline
+- 1.4 LLM Service: integración Gemini + construcción del prompt
+- 1.5 DB Service: ejecución de queries + timeout
+- 1.6 Router /api/query: pipeline completo + retry logic
 
-### Fase 2 — Frontend Base (~4-5 días)
+### Fase 2 — Frontend Base
 
-- [x] 2.1 Setup React + Vite + proxy a backend
-- [x] 2.2 QueryInput: textarea + botón + loading state
-- [x] 2.3 ResultTable: tabla paginada + manejo de vacío
-- [x] 2.4 SqlViewer: bloque colapsable + copy to clipboard
-- [x] 2.5 QueryHistory: historial de sesión en memoria
+- 2.1 Setup React + Vite + proxy a backend
+- 2.2 QueryInput: textarea + botón + loading state
+- 2.3 ResultTable: tabla paginada + manejo de vacío
+- 2.4 SqlViewer: bloque colapsable + copy to clipboard
+- 2.5 QueryHistory: historial de sesión en memoria
 
-### Fase 3 — Inteligencia (~4-5 días)
+### Fase 3 — Inteligencia
 
-- [x] 3.1 Chart Service (backend): lógica de decisión de gráfico
-- [x] 3.2 ChartRenderer (frontend): Bar, Line, Pie, KPI, fallback tabla
-- [x] 3.3 Retry con autocorrección (ya definido en el router, pulir)
-- [x] 3.4 Manejo de ambigüedad: clarification_needed en UI
-- [x] 3.5 ErrorMessage: mensajes por tipo de error
+- 3.1 Chart Service (backend): lógica de decisión de gráfico
+- 3.2 ChartRenderer (frontend): Bar, Line, Pie, KPI, fallback tabla
+- 3.3 Retry con autocorrección (ya definido en el router, pulir)
+- 3.4 Manejo de ambigüedad: clarification_needed en UI
+- 3.5 ErrorMessage: mensajes por tipo de error
 
-### Fase 4 — Pulido Final (~2-3 días)
+### Fase 4 — Pulido Final
 
-- [ ] 4.1 Docker Compose completo con health checks
-- [ ] 4.2 UI polish con Tailwind + preguntas de ejemplo precargadas
-- [ ] 4.3 README profesional con demo GIF y 3 pasos de instalación
-- [ ] 4.4 Few-shot examples del prompt mejorados con preguntas reales testeadas
+- 4.1 Docker Compose completo con health checks
+- 4.2 UI polish con Tailwind + preguntas de ejemplo precargadas
+- 4.3 README profesional con demo GIF y 3 pasos de instalación
+- 4.4 Few-shot examples del prompt mejorados con preguntas reales testeadas
 
 ---
 
@@ -525,4 +525,4 @@ Estas preguntas están validadas para funcionar bien con el dataset Olist:
 
 ---
 
-_Última actualización: 26/5_
+_Última actualización: 29/5_
