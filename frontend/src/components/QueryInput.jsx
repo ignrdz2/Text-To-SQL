@@ -5,9 +5,15 @@ import { useState } from 'react'
  * Props:
  *   onSubmit(question: string) — llamado al enviar una pregunta no vacía
  *   isLoading: bool            — bloquea textarea y botón mientras espera respuesta
+ *   value?: string             — modo controlado (ej: para rellenar desde el historial)
+ *   onChange?: (v: string) => void — callback de cambio en modo controlado
  */
-export default function QueryInput({ onSubmit, isLoading }) {
-  const [question, setQuestion] = useState('')
+export default function QueryInput({ onSubmit, isLoading, value: controlledValue, onChange: controlledOnChange }) {
+  const [internalQuestion, setInternalQuestion] = useState('')
+
+  // Modo controlado si se pasan value/onChange; de lo contrario usa estado interno
+  const question = controlledValue !== undefined ? controlledValue : internalQuestion
+  const setQuestion = controlledOnChange !== undefined ? controlledOnChange : setInternalQuestion
 
   const canSubmit = question.trim().length > 0 && !isLoading
 
