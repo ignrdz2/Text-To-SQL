@@ -485,19 +485,19 @@ El sanitizer debe rechazar cualquier query que:
 
 ### Fase 2 — Frontend Base (~4-5 días)
 
-- [ ] 2.1 Setup React + Vite + proxy a backend
-- [ ] 2.2 QueryInput: textarea + botón + loading state
-- [ ] 2.3 ResultTable: tabla paginada + manejo de vacío
-- [ ] 2.4 SqlViewer: bloque colapsable + copy to clipboard
-- [ ] 2.5 QueryHistory: historial de sesión en memoria
+- [x] 2.1 Setup React + Vite + proxy a backend
+- [x] 2.2 QueryInput: textarea + botón + loading state
+- [x] 2.3 ResultTable: tabla paginada + manejo de vacío
+- [x] 2.4 SqlViewer: bloque colapsable + copy to clipboard
+- [x] 2.5 QueryHistory: historial de sesión en memoria
 
 ### Fase 3 — Inteligencia (~4-5 días)
 
-- [ ] 3.1 Chart Service (backend): lógica de decisión de gráfico
-- [ ] 3.2 ChartRenderer (frontend): Bar, Line, Pie, KPI, fallback tabla
-- [ ] 3.3 Retry con autocorrección (ya definido en el router, pulir)
-- [ ] 3.4 Manejo de ambigüedad: clarification_needed en UI
-- [ ] 3.5 ErrorMessage: mensajes por tipo de error
+- [x] 3.1 Chart Service (backend): lógica de decisión de gráfico
+- [x] 3.2 ChartRenderer (frontend): Bar, Line, Pie, KPI, fallback tabla
+- [x] 3.3 Retry con autocorrección (ya definido en el router, pulir)
+- [x] 3.4 Manejo de ambigüedad: clarification_needed en UI
+- [x] 3.5 ErrorMessage: mensajes por tipo de error
 
 ### Fase 4 — Pulido Final (~2-3 días)
 

@@ -155,18 +155,18 @@ Top 10 categorías de productos más vendidas
 
 ### Fase 2 — Frontend (en desarrollo)
 
-- [ ] Setup React + Vite
-- [ ] QueryInput: textarea + botón + loading state
-- [ ] ResultTable: tabla paginada
-- [ ] SqlViewer: SQL expandible y copiable
-- [ ] QueryHistory: historial de sesión
+- [x] Setup React + Vite
+- [x] QueryInput: textarea + botón + loading state
+- [x] ResultTable: tabla paginada
+- [x] SqlViewer: SQL expandible y copiable
+- [x] QueryHistory: historial de sesión
 
 ### Fase 3 — Visualizaciones (en desarrollo)
 
-- [ ] Chart Service: decisión automática de tipo de gráfico
-- [ ] ChartRenderer: Bar, Line, Pie, KPI con Recharts
-- [ ] ErrorMessage: mensajes por tipo de error
-- [ ] Manejo de clarificaciones en UI
+- [x] Chart Service: decisión automática de tipo de gráfico
+- [x] ChartRenderer: Bar, Line, Pie, KPI con Recharts
+- [x] ErrorMessage: mensajes por tipo de error
+- [x] Manejo de clarificaciones en UI
 
 ### Fase 4 — Pulido (en desarrollo)
 

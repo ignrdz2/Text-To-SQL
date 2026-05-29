@@ -4,6 +4,7 @@ import QueryHistory from "./components/QueryHistory";
 import SqlViewer from "./components/SqlViewer";
 import ChartRenderer from "./components/ChartRenderer";
 import ClarificationMessage from "./components/ClarificationMessage";
+import ErrorMessage from "./components/ErrorMessage";
 import ResultTable from "./components/ResultTable";
 
 // Preguntas de ejemplo del SPEC #18 para el estado inicial
@@ -84,9 +85,7 @@ function ResultArea({ result, isLoading, onAnswer, onClearResult }) {
 
   // Error del backend
   if (result.error) {
-    return (
-      <ErrorBanner type={result.error.type} message={result.error.message} />
-    );
+    return <ErrorMessage error={result.error} />;
   }
 
   // El LLM pide clarificación
@@ -140,44 +139,3 @@ function WelcomePanel() {
     </div>
   );
 }
-
-function ErrorBanner({ type, message }) {
-  const isTimeout = type === "DB_ERROR" && message.includes("10 segundos");
-
-  return (
-    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-red-500">
-          <ErrorIcon />
-        </span>
-        <p className="text-sm font-medium text-red-800">
-          {isTimeout ? "La consulta tardó demasiado" : "Ocurrió un error"}
-        </p>
-      </div>
-      <p className="text-sm text-red-600 ml-6">{message}</p>
-      {type === "LLM_ERROR" && (
-        <p className="text-xs text-red-400 ml-6 mt-2">
-          Intentá de nuevo en unos segundos.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function ErrorIcon() {
-  return (
-    <svg
-      className="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="8" x2="12" y2="12" />
-      <line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-  );
-}
-
