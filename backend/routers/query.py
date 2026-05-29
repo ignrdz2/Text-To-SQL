@@ -21,6 +21,7 @@ from services.llm_service import (
     LLMError,
     generate_sql,
 )
+from services.chart_service import decide as chart_decide
 from services.sanitizer import sanitize
 
 router = APIRouter(prefix="/api")
@@ -103,7 +104,14 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
     # Paso 4: ejecución
     try:
         result = execute_query(sql)
-        return QueryResponse(sql=sql, columns=result["columns"], data=result["data"])
+        chart = chart_decide(result["columns"], result["data"])
+        return QueryResponse(
+            sql=sql,
+            columns=result["columns"],
+            data=result["data"],
+            chart_type=chart["chart_type"],
+            chart_config=chart["chart_config"],
+        )
 
     except DBError as first_error:
         logger.warning("Ejecución fallida: %s — iniciando reintento.", first_error)
@@ -134,7 +142,14 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
         try:
             result2 = execute_query(sql2)
             logger.info("Reintento exitoso.")
-            return QueryResponse(sql=sql2, columns=result2["columns"], data=result2["data"])
+            chart2 = chart_decide(result2["columns"], result2["data"])
+            return QueryResponse(
+                sql=sql2,
+                columns=result2["columns"],
+                data=result2["data"],
+                chart_type=chart2["chart_type"],
+                chart_config=chart2["chart_config"],
+            )
 
         except DBError as second_error:
             logger.error("Reintento también falló: %s", second_error)
