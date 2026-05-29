@@ -2,6 +2,7 @@ import { useQuery } from "./hooks/useQuery";
 import QueryInput from "./components/QueryInput";
 import QueryHistory from "./components/QueryHistory";
 import SqlViewer from "./components/SqlViewer";
+import ChartRenderer from "./components/ChartRenderer";
 import ResultTable from "./components/ResultTable";
 
 // Preguntas de ejemplo del SPEC #18 para el estado inicial
@@ -91,6 +92,14 @@ function ResultArea({ result, isLoading }) {
   return (
     <>
       <SqlViewer sql={result.sql} />
+      {result.chart_type && result.chart_type !== "table" && (
+        <ChartRenderer
+          chart_type={result.chart_type}
+          chart_config={result.chart_config}
+          data={result.data}
+          columns={result.columns}
+        />
+      )}
       <ResultTable
         columns={result.columns}
         data={result.data}
