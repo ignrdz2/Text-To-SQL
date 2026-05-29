@@ -42,11 +42,12 @@ class QueryResponse(BaseModel):
     sql: str | None = None
     columns: list[str] = []
     data: list[dict[str, Any]] = []
-    chart_type: str | None = None       # placeholder hasta Phase 3
-    chart_config: dict | None = None    # placeholder hasta Phase 3
+    chart_type: str | None = None
+    chart_config: dict | None = None
     error: ErrorDetail | None = None
     clarification_needed: bool = False
     clarification_question: str | None = None
+    retry_attempted: bool = False
 
 
 # Helpers de respuesta
@@ -114,16 +115,18 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
         )
 
     except DBError as first_error:
-        logger.warning("Ejecución fallida: %s — iniciando reintento.", first_error)
+        logger.warning("[RETRY] SQL original falló: %s", first_error)
 
-        # Paso 5: reintento único (SPEC #8-A)
-        # Pasamos el SQL fallido + el error de PostgreSQL al LLM para que corrija.
+        # Paso 5: reintento único (SPEC §8-A)
+        # Se pasa el SQL fallido y el error exacto de PostgreSQL al LLM para que corrija.
         retry_question = (
             f"{question}\n\n"
-            f"[SQL anterior con error]:\n{sql}\n\n"
+            f"[SQL anterior]:\n{sql}\n\n"
             f"[Error de PostgreSQL]:\n{first_error}\n\n"
-            f"Genera una nueva query SQL que corrija ese error."
+            f"El SQL anterior falló con este error. Generá una versión corregida."
         )
+
+        logger.info("[RETRY] Intentando con SQL corregido...")
 
         try:
             sql2 = generate_sql(retry_question, schema)
@@ -131,7 +134,7 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
             logger.error("LLM error (reintento): %s", exc)
             return _error("LLM_ERROR", str(exc))
 
-        # Si el reintento devuelve una respuesta especial, informamos el error original
+        # Si el LLM devuelve respuesta especial, reportamos el error original
         if _is_special_response(sql2):
             return _error("DB_ERROR", str(first_error))
 
@@ -141,7 +144,7 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
 
         try:
             result2 = execute_query(sql2)
-            logger.info("Reintento exitoso.")
+            logger.info("[RETRY] Segundo intento exitoso.")
             chart2 = chart_decide(result2["columns"], result2["data"])
             return QueryResponse(
                 sql=sql2,
@@ -149,10 +152,11 @@ def query_endpoint(request: QueryRequest) -> QueryResponse:
                 data=result2["data"],
                 chart_type=chart2["chart_type"],
                 chart_config=chart2["chart_config"],
+                retry_attempted=True,
             )
 
         except DBError as second_error:
-            logger.error("Reintento también falló: %s", second_error)
+            logger.error("[RETRY] Falló también: %s", second_error)
             return _error("DB_ERROR", str(second_error))
 
 
